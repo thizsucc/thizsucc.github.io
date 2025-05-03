@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>H4RSH Auth</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #3a3a3a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 320px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background-color: #e15c13;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #a45d1f;
+    }
+
+    #message {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #cccccc;
+    }
+
+    .switch-link {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+      color: #ccc;
+    }
+
+    .switch-link a {
+      color: #ccc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .switch-link a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Login Section -->
+    <div id="login-section">
+      <h2>Login to H4RSH</h2>
+      <input type="text" id="login-username" placeholder="Username" required />
+      <input type="password" id="login-password" placeholder="Password" required />
+      <p class="switch-link">
+        Don't have an account?
+        <a href="#" onclick="showRegister()">Sign up</a>
+      </p>
+      <button onclick="signin()">Log In</button>
+      <p id="login-message"></p>
+    </div>
+
+    <!-- Register Section -->
+    <div id="register-section" class="hidden">
+      <h2>Create Your H4RSH Account</h2>
+      <input type="text" id="register-username" placeholder="Choose a Username" required />
+      <input type="password" id="register-password" placeholder="Choose a Password" required />
+      <p class="switch-link">
+        Already have an account?
+        <a href="#" onclick="showLogin()">Sign in</a>
+      </p>
+      <button onclick="signup()">Sign Up</button>
+      <p id="register-message"></p>
+    </div>
+  </div>
+
+  <script>
+    function showLogin() {
+      document.getElementById("login-section").classList.remove("hidden");
+      document.getElementById("register-section").classList.add("hidden");
+    }
+
+    function showRegister() {
+      document.getElementById("register-section").classList.remove("hidden");
+      document.getElementById("login-section").classList.add("hidden");
+    }
+
+    function signin() {
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value.trim();
+      const saved = localStorage.getItem(username);
+
+      if (saved && saved === password) {
+        document.querySelector(".container").innerHTML = `
+          <h2>Welcome, ${username}!</h2>
+          <p style="text-align:center;">✅ You're logged in.</p>
+          <a href="https://sites.google.com/view/h4rshstreetwear/home" target="_blank" style="display:block; text-align:center; color:#e15c13; font-weight:bold;">Click here to continue</a>
+        `;
+      } else {
+        document.getElementById("login-message").innerText = "❌ Invalid username or password.";
+      }
+    }
+
+    function signup() {
+      const username = document.getElementById("register-username").value.trim();
+      const password = document.getElementById("register-password").value.trim();
+
+      if (!username || !password) {
+        document.getElementById("register-message").innerText = "⚠️ Please fill in both fields.";
+        return;
+      }
+
+      if (localStorage.getItem(username)) {
+        document.getElementById("register-message").innerText = "⚠️ Username already exists.";
+      } else {
+        localStorage.setItem(username, password);
+        document.querySelector(".container").innerHTML = `
+          <h2>Welcome, ${username}!</h2>
+          <p style="text-align:center;">✅ Account created.</p>
+          <a href="https://sites.google.com/view/h4rshstreetwear/home" target="_blank" style="display:block; text-align:center; color:#e15c13; font-weight:bold;">Click here to continue</a>
+        `;
+      }
+    }
+  </script>
+</body>
+
+</html>
