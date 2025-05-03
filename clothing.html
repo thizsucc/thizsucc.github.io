@@ -117,25 +117,26 @@
       { name: "Limited Shirt", price: "RM95.00", img: "img/limitedshirt.png" }
     ];
 
-    function showPage(page) {
-      const grid = document.getElementById("grid");
-      const perPage = 8;
-      const start = (page - 1) * perPage;
-      const end = start + perPage;
-      const visible = products.slice(start, end);
+function showPage(page) {
+  const grid = document.getElementById("grid");
+  const perPage = 8;
+  const start = (page - 1) * perPage;
+  const end = start + perPage;
+  const visible = products.slice(start, end);
 
-      grid.innerHTML = visible.map(p => `
-        <div class="product-card">
-          <img src="\${p.img}" alt="\${p.name}" />
-          <div class="product-name">\${p.name}</div>
-          <div class="product-price">\${p.price}</div>
-        </div>
-      `).join("");
+  grid.innerHTML = visible.map(p => `
+    <div class="product-card">
+      <img src="${p.img}" alt="${p.name}" />
+      <div class="product-name">${p.name}</div>
+      <div class="product-price">${p.price}</div>
+    </div>
+  `).join("");
 
-      document.getElementById("btn1").classList.remove("active");
-      document.getElementById("btn2").classList.remove("active");
-      document.getElementById("btn" + page).classList.add("active");
-    }
+  document.getElementById("btn1").classList.remove("active");
+  document.getElementById("btn2").classList.remove("active");
+  document.getElementById("btn" + page).classList.add("active");
+}
+
 
     showPage(1); // initial load
   </script>
