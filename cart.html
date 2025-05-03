@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Cart</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: sans-serif; padding: 40px; background: #f4f4f4; }
+    h1 { text-align: center; }
+    table { width: 100%%; border-collapse: collapse; background: white; }
+    th, td { padding: 12px 16px; border: 1px solid #ddd; text-align: left; }
+    th { background: #222; color: #fff; }
+    tfoot td { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Your Cart</h1>
+  <table id="cartTable">
+    <thead>
+      <tr><th>Item</th><th>Price (USD)</th></tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr><td>Total</td><td id="totalPrice">$0.00</td></tr>
+    </tfoot>
+  </table>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBa1fzqUYWAshoF1zK2x2m1XuR2eMEw8s",
+      authDomain: "uproject-2e3c7.firebaseapp.com",
+      projectId: "uproject-2e3c7",
+      storageBucket: "uproject-2e3c7.appspot.com",
+      messagingSenderId: "161272239397",
+      appId: "1:161272239397:web-3bb6f53fd53e61934c4504",
+      measurementId: "G-96RNXJ8J7X"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const tbody = document.querySelector("tbody");
+    const totalEl = document.getElementById("totalPrice");
+    let total = 0;
+
+    db.ref("cart").on("value", snapshot => {
+      const data = snapshot.val();
+      tbody.innerHTML = "";
+      total = 0;
+      for (let id in data) {
+        const item = data[id];
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${item.name}</td><td>$${item.price}</td>`;
+        tbody.appendChild(tr);
+        total += parseFloat(item.price);
+      }
+      totalEl.textContent = "$" + total.toFixed(2);
+    });
+  </script>
+</body>
+</html>

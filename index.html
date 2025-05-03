@@ -3,40 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clothing Shop</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>H4RSHH - Shop</title>
+  <style>
+  body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 40px;
+  background-color: #FFFFFF;
+  background-size: cover;
+  background-position: center;
+}
+
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 36px;
+    }
+	.product-brand {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 16px;
+			text-align: center;
+			
+        }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 15px;
+      text-align: center;
+      transition: box-shadow 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 10px 0 5px;
+    }
+
+    .product-price {
+      color: #444;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>SHOP THE DROP</h1>
-  </header>
 
-  <main class="product-grid">
-    <div class="product" data-name="MC Night Jacket" data-price="89">
-      <img src="images/jacket1.png" alt="MC Night Jacket" />
-      <h2>MC NIGHT JACKET</h2>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
-    <div class="product" data-name="Corporate Jacket" data-price="99">
-      <img src="images/jacket2.png" alt="Corporate Jacket" />
-      <h2>CORPORATE JACKET</h2>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
-    <div class="product" data-name="Sandevistan Hoodie" data-price="79">
-      <img src="images/hoodie1.png" alt="Sandevistan Hoodie" />
-      <h2>SANDEVISTAN HOODIE</h2>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
-    <div class="product" data-name="Smasher Crewneck" data-price="85">
-      <img src="images/sweater1.png" alt="Smasher Crewneck" />
-      <h2>SMASHER CREWNECK</h2>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
-  </main>
+  <h1>H4RSHH WORLDWIDE</h1>
+  <div class="product-brand">HARSH COLLECTION</div>
 
-  <!-- Firebase Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="script.js"></script>
+  <div class="product-grid">
+    <a href="harshlove.html" class="product-card">
+      <img src="img/boxyshirt.png" alt="Harsh Love Tee">
+      <div class="product-name">HARSH LOVE TEE</div>
+      <div class="product-price">RM75.00</div>
+    </a>
+
+    <a href="astralpants.html" class="product-card">
+      <img src="img/astralpants.png" alt="Astral Pants">
+      <div class="product-name">ASTRAL PANTS</div>
+      <div class="product-price">RM125.00</div>
+    </a>
+
+    <a href="harshnecklace.html" class="product-card">
+      <img src="img/necklace.png" alt="Harsh Necklace">
+      <div class="product-name">HARSH NECKLACE</div>
+      <div class="product-price">RM57.00</div>
+    </a>
+
+    <a href="boxyshirt.html" class="product-card">
+      <img src="img/plainboxy.png" alt="Plain Boxy Shirt">
+      <div class="product-name">PLAIN BOXY SHIRT</div>
+      <div class="product-price">RM60.00</div>
+    </a>
+	
+	<a href="harshring.html" class="product-card">
+      <img src="img\ring4.png" alt="Astral Pants">
+      <div class="product-name">HARSH LOVE RINGS</div>
+      <div class="product-price">RM40.00</div>
+    </a>
+  </div>
+
 </body>
 </html>

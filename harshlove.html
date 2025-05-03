@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HARSH LOVE BOXY TEE - Streetwear Collection</title>
+  <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+        .product-gallery {
+            flex: 1;
+            min-width: 300px;
+        }
+        .main-image-container {
+            position: relative;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border-radius: 8px;
+            aspect-ratio: 1/1;
+            background: #f5f5f5;
+        }
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.3s;
+        }
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #eee;
+            object-fit: cover;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .thumbnail:hover {
+            border-color: #999;
+            transform: scale(1.05);
+        }
+        .thumbnail.active {
+            border: 2px solid #000;
+        }
+        .product-details {
+            flex: 1;
+            min-width: 300px;
+        }
+        .product-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        .product-brand {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .price {
+            font-size: 24px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 25px;
+        }
+        .size-section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: block;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .size-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .size-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+        }
+        .size-option:hover {
+            border-color: #999;
+        }
+        .size-option.selected {
+            background-color: #000;
+            color: white;
+            border-color: #000;
+        }
+        .size-option.unavailable {
+            color: #ccc;
+            background-color: #f9f9f9;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        .quantity-section {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        .quantity-input {
+            width: 70px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 16px;
+            margin-left: 15px;
+            font-weight: 600;
+        }
+        .total-section {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 25px 0;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 16px 28px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.2s;
+            flex: 1;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .add-to-cart {
+            background-color: #000;
+            color: white;
+        }
+        .add-to-cart:hover {
+            background-color: #333;
+        }
+        .checkout {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .checkout:hover {
+            background-color: #45a049;
+        }
+        .notification {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .notification.success {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .error {
+            color: #d32f2f;
+            margin-top: 10px;
+            display: none;
+            font-size: 14px;
+        }
+        .image-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #ff5252;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+        .product-description {
+            margin-top: 30px;
+            line-height: 1.6;
+            color: #555;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .product-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div class="product-container">
+    <div class="product-gallery">
+      <div class="main-image-container">
+        <div class="image-badge">BESTSELLER</div>
+        <img id="mainImage" class="main-image" src="C:\xampp\htdocs\HARSH\img\boxyshirt.png" alt="HARSH LOVE BOXY TEE Front View">
+      </div>
+      <div class="thumbnail-container">
+        <img class="thumbnail active" src="C:\xampp\htdocs\HARSH\img\boxy1.png" alt="Front View" onclick="changeImage(this, 'https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?auto=format&fit=crop&w=1000&q=80')">
+        <img class="thumbnail" src="C:\xampp\htdocs\HARSH\img\boxy2.png" alt="Back View" onclick="changeImage(this, 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=1000&q=80')">
+        <img class="thumbnail" src="C:\xampp\htdocs\HARSH\img\boxy3.png" alt="Detail View" onclick="changeImage(this, 'https://images.unsplash.com/photo-1527719327859-c6ce80353573?auto=format&fit=crop&w=1000&q=80')">
+        <img class="thumbnail" src="C:\xampp\htdocs\HARSH\img\boxy4.png" alt="Model Wearing" onclick="changeImage(this, 'https://images.unsplash.com/photo-1539533018447-63fcce2678e4?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+    </div>
+
+    <div class="product-details">
+      <h1 class="product-title">HARSH LOVE BOXY TEE</h1>
+      <div class="product-brand">HARSH STREETWEAR</div>
+      <div class="price">RM 75.00</div>
+
+      <div class="size-section">
+        <span class="section-title">Select Your Size</span>
+        <div class="size-options">
+          <div class="size-option" data-size="XS">XS</div>
+          <div class="size-option" data-size="S">S</div>
+          <div class="size-option selected" data-size="M">M</div>
+          <div class="size-option" data-size="L">L</div>
+          <div class="size-option" data-size="XL">XL</div>
+          <div class="size-option unavailable" data-size="XXL">XXL</div>
+        </div>
+        <div id="sizeError" class="error">Please select a size</div>
+      </div>
+
+      <div class="quantity-section">
+        <span class="section-title">Quantity:</span>
+        <input type="number" id="quantity" class="quantity-input" min="1" value="1">
+      </div>
+
+      <div class="total-section" id="totalPrice">TOTAL: RM 75.00</div>
+
+      <div class="button-group">
+        <button class="btn add-to-cart" id="addToCartBtn">Add to Cart</button>
+        <button class="btn checkout" id="checkoutBtn">Buy Now</button>
+      </div>
+
+      <div id="notification" class="notification"></div>
+
+      <div class="product-description">
+        <p>The HARSH LOVE BOXY TEE is a streetwear essential featuring an oversized boxy fit and premium heavyweight cotton fabric. Designed with a bold graphic print and dropped shoulders for a contemporary urban look.</p>
+        <p><br>• 100% Premium Cotton<br>• Oversized boxy fit<br>• Screen-printed graphic<br>• Ribbed crew neck<br>• Wash cold, hang dry</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const product = {
+      name: "HARSH LOVE BOXY TEE",
+      brand: "HARSH STREETWEAR",
+      price: 75.00,
+      images: [
+        { main: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?auto=format&fit=crop&w=1000&q=80", thumb: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?auto=format&fit=crop&w=200&q=80", alt: "Front View" },
+        { main: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=1000&q=80", thumb: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=200&q=80", alt: "Back View" },
+        { main: "https://images.unsplash.com/photo-1527719327859-c6ce80353573?auto=format&fit=crop&w=1000&q=80", thumb: "https://images.unsplash.com/photo-1527719327859-c6ce80353573?auto=format&fit=crop&w=200&q=80", alt: "Detail View" },
+        { main: "https://images.unsplash.com/photo-1539533018447-63fcce2678e4?auto=format&fit=crop&w=1000&q=80", thumb: "https://images.unsplash.com/photo-1539533018447-63fcce2678e4?auto=format&fit=crop&w=200&q=80", alt: "Model Wearing" }
+      ]
+    };
+
+    const mainImage = document.getElementById('mainImage');
+    const sizeOptions = document.querySelectorAll('.size-option:not(.unavailable)');
+    const quantityInput = document.getElementById('quantity');
+    const totalPriceElement = document.getElementById('totalPrice');
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const notification = document.getElementById('notification');
+    const sizeError = document.getElementById('sizeError');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+
+    let selectedSize = 'M';
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    updateTotalPrice();
+
+    function changeImage(thumbnail, newImageUrl) {
+      mainImage.src = newImageUrl;
+      thumbnails.forEach(thumb => thumb.classList.remove('active'));
+      thumbnail.classList.add('active');
+    }
+
+    sizeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedSize = option.dataset.size;
+        sizeError.style.display = 'none';
+      });
+    });
+
+    quantityInput.addEventListener('change', updateTotalPrice);
+
+    function updateTotalPrice() {
+      const quantity = parseInt(quantityInput.value) || 1;
+      const total = (product.price * quantity).toFixed(2);
+      totalPriceElement.textContent = `TOTAL: RM ${total}`;
+    }
+
+    addToCartBtn.addEventListener('click', () => {
+      if (!selectedSize) {
+        sizeError.style.display = 'block';
+        return;
+      }
+
+      const quantity = parseInt(quantityInput.value) || 1;
+      const total = (product.price * quantity).toFixed(2);
+
+      const cartItem = {
+        product: product.name,
+        brand: product.brand,
+        size: selectedSize,
+        quantity,
+        price: product.price,
+        total,
+        image: product.images[0].thumb
+      };
+
+      cart.push(cartItem);
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      notification.textContent = `${quantity} × ${product.name} (Size: ${selectedSize}) added to cart - RM ${total}`;
+      notification.className = "notification success";
+      notification.style.display = 'block';
+
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    });
+
+    checkoutBtn.addEventListener('click', () => {
+      if (!selectedSize) {
+        sizeError.style.display = 'block';
+        return;
+      }
+
+      const quantity = parseInt(quantityInput.value) || 1;
+      const total = (product.price * quantity).toFixed(2);
+
+      const checkoutItems = [{
+        product: product.name,
+        brand: product.brand,
+        size: selectedSize,
+        quantity,
+        price: product.price,
+        total,
+        image: product.images[0].thumb
+      }];
+
+      localStorage.setItem('checkoutItems', JSON.stringify(checkoutItems));
+
+      const summary = `
+ORDER SUMMARY:
+
+${product.name}
+Size: ${selectedSize}
+Quantity: ${quantity}
+Price per item: RM ${product.price}
+Total: RM ${total}
+
+Proceed to payment?`;
+
+      if (confirm(summary)) {
+        alert('Redirecting to secure checkout...');
+        window.location.href = 'buynowshirt.html';
+      }
+    });
+  </script>
+</body>
+</html>

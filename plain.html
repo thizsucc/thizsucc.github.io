@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - HARSH STREETWEAR</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        .checkout-container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        .item-details {
+            flex: 1;
+        }
+        .item-details p {
+            margin: 4px 0;
+        }
+        .total {
+            text-align: right;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .btn {
+            margin-top: 30px;
+            display: inline-block;
+            background: black;
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h1>Checkout Summary</h1>
+        <div id="items"></div>
+        <div class="total" id="grandTotal">TOTAL: RM 0.00</div>
+        <button class="btn" onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <script>
+        const checkoutItems = JSON.parse(localStorage.getItem('checkoutItems')) || [];
+        const itemsContainer = document.getElementById('items');
+        const grandTotal = document.getElementById('grandTotal');
+
+        let total = 0;
+
+        checkoutItems.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = `
+                <img src="${"img/plainboxy.png"}" alt="${item.product}">
+                <div class="item-details">
+                    <p><strong>${item.product}</strong></p>
+                    <p>Size: ${item.size}</p>
+                    <p>Qty: ${item.quantity}</p>
+                    <p>RM ${item.total}</p>
+                </div>
+            `;
+            itemsContainer.appendChild(div);
+            total += parseFloat(item.total);
+        });
+
+        grandTotal.textContent = `TOTAL: RM ${total.toFixed(2)}`;
+
+        function placeOrder() {
+            alert("Thank you for your order! We'll process it soon.");
+            localStorage.removeItem('checkoutItems');
+            window.location.href = 'mainpage.html'; // Redirect after placing order
+        }
+    </script>
+</body>
+</html>
