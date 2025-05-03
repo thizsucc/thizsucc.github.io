@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,54 +7,96 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f8f8;
       margin: 0;
       padding: 40px;
-      background-color: #f9f9f9;
     }
 
     h1 {
       text-align: center;
-      font-size: 36px;
+      font-size: 32px;
       margin-bottom: 40px;
     }
 
-    table {
+    .cart-table {
       width: 100%;
-      max-width: 900px;
-      margin: auto;
+      max-width: 1000px;
+      margin: 0 auto;
       border-collapse: collapse;
-      background: white;
-      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
 
-    th, td {
-      padding: 16px 20px;
-      border-bottom: 1px solid #eee;
+    .cart-table thead th {
       text-align: left;
+      padding: 16px 20px;
+      font-size: 16px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
     }
 
-    th {
-      background-color: #222;
-      color: white;
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
     }
 
-    tfoot td {
+    .cart-item img {
+      width: 100px;
+      height: auto;
+      margin-right: 20px;
+      border: 1px solid #ddd;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-info h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .item-info small {
+      color: #666;
+    }
+
+    .quantity-control {
+      width: 60px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px;
+      margin-right: 16px;
+    }
+
+    .remove-link {
+      color: #888;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .total-price {
+      text-align: right;
+      padding: 20px;
       font-weight: bold;
       font-size: 18px;
     }
 
-    .buttons {
-      max-width: 900px;
-      margin: 40px auto;
+    .cart-buttons {
       display: flex;
       justify-content: space-between;
+      max-width: 1000px;
+      margin: 30px auto 0;
     }
 
-    .buttons button {
+    .cart-buttons button {
       padding: 12px 20px;
       font-size: 16px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
     }
 
@@ -63,7 +104,7 @@
       background: #ccc;
     }
 
-    .pay-btn {
+    .checkout-btn {
       background: #000;
       color: #fff;
     }
@@ -73,22 +114,25 @@
 
   <h1>Your Cart</h1>
 
-  <table id="cartTable">
+  <table class="cart-table">
     <thead>
-      <tr><th>Item</th><th>Price</th></tr>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
     </thead>
-    <tbody></tbody>
-    <tfoot>
-      <tr><td>Total</td><td id="totalPrice">RM0.00</td></tr>
-    </tfoot>
+    <tbody id="cartBody"></tbody>
   </table>
 
-  <div class="buttons">
+  <div class="total-price" id="grandTotal">Total: RM0.00</div>
+
+  <div class="cart-buttons">
     <button class="back-btn" onclick="window.location.href='index.html'">← Go Back</button>
-    <button class="pay-btn" onclick="proceedToPayment()">Proceed to Payment →</button>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Payment →</button>
   </div>
 
-  <!-- Firebase scripts -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script>
@@ -104,32 +148,50 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    const cartBody = document.getElementById("cartBody");
+    const grandTotal = document.getElementById("grandTotal");
 
-    const tbody = document.querySelector("tbody");
-    const totalEl = document.getElementById("totalPrice");
-
-    let total = 0;
     db.ref("cart").once("value").then(snapshot => {
       const data = snapshot.val();
-      total = 0;
+      let total = 0;
       if (data) {
-        Object.values(data).forEach(item => {
+        Object.entries(data).forEach(([key, item]) => {
           const row = document.createElement("tr");
-          row.innerHTML = `<td>${item.name}</td><td>RM${item.price}</td>`;
-          tbody.appendChild(row);
+          row.innerHTML = `
+            <td>
+              <div class="cart-item">
+                <img src="img/boxyshirt.png" alt="${item.name}" />
+                <div class="item-info">
+                  <h3>${item.name}</h3>
+                  <small>RM${item.price} MYR</small><br>
+                  <small>Size: Free</small>
+                </div>
+              </div>
+            </td>
+            <td style="text-align:center;">
+              <input class="quantity-control" type="number" value="1" min="1" readonly />
+              <div class="remove-link" onclick="removeItem('${key}')">Remove</div>
+            </td>
+            <td style="text-align:right;">RM${item.price}</td>
+          `;
+          cartBody.appendChild(row);
           total += parseFloat(item.price);
         });
       } else {
-        const row = document.createElement("tr");
-        row.innerHTML = '<td colspan="2">No items in cart.</td>';
-        tbody.appendChild(row);
+        cartBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Your cart is empty.</td></tr>';
       }
-      totalEl.textContent = "RM" + total.toFixed(2);
+      grandTotal.textContent = "Total: RM" + total.toFixed(2);
     });
 
-    function proceedToPayment() {
-      alert("Redirecting to payment gateway... (mock action)");
-      // You can link to a real payment service or next page here
+    function removeItem(key) {
+      if (confirm("Remove this item from cart?")) {
+        firebase.database().ref("cart/" + key).remove().then(() => location.reload());
+      }
+    }
+
+    function checkout() {
+      alert("Proceeding to payment gateway...");
+      // Replace with actual payment logic if needed
     }
   </script>
 
