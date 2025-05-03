@@ -190,8 +190,30 @@
     }
 
     function checkout() {
-      // Add actual checkout logic here (e.g., redirect to payment gateway)
-      alert("Proceeding to payment gateway...");
+      const totalAmount = document.getElementById("grandTotal").textContent.replace("Total: RM", "").trim();
+      const confirmationMessage = `
+        You're about to purchase the following:
+
+        Total Amount: RM ${totalAmount}
+
+        Please confirm to proceed to payment.
+      `;
+
+      const confirmed = confirm(confirmationMessage);
+
+      if (confirmed) {
+        // Simulate a successful transaction
+        alert("Payment successful! Thank you for your purchase.");
+        
+        // Clear the cart and redirect to a "Thank You" page
+        db.ref("cart").remove().then(() => {
+          alert("Your cart has been cleared.");
+          window.location.href = "thankyou.html"; // Example redirect to a thank you page
+        });
+      } else {
+        // If the user cancels the checkout
+        alert("Payment cancelled. You can continue shopping.");
+      }
     }
   </script>
 
