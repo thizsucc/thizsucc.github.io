@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 40px;
+    }
+
+    table {
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 16px 20px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background-color: #222;
+      color: white;
+    }
+
+    tfoot td {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .buttons {
+      max-width: 900px;
+      margin: 40px auto;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .buttons button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .back-btn {
+      background: #ccc;
+    }
+
+    .pay-btn {
+      background: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Your Cart</h1>
+
+  <table id="cartTable">
+    <thead>
+      <tr><th>Item</th><th>Price</th></tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr><td>Total</td><td id="totalPrice">RM0.00</td></tr>
+    </tfoot>
+  </table>
+
+  <div class="buttons">
+    <button class="back-btn" onclick="window.location.href='index.html'">← Go Back</button>
+    <button class="pay-btn" onclick="proceedToPayment()">Proceed to Payment →</button>
+  </div>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBa1fzqUYWAshoF1zK2x2m1XuR2eMEw8s",
+      authDomain: "uproject-2e3c7.firebaseapp.com",
+      projectId: "uproject-2e3c7",
+      storageBucket: "uproject-2e3c7.appspot.com",
+      messagingSenderId: "161272239397",
+      appId: "1:161272239397:web-3bb6f53fd53e61934c4504",
+      measurementId: "G-96RNXJ8J7X"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const tbody = document.querySelector("tbody");
+    const totalEl = document.getElementById("totalPrice");
+
+    let total = 0;
+    db.ref("cart").once("value").then(snapshot => {
+      const data = snapshot.val();
+      total = 0;
+      if (data) {
+        Object.values(data).forEach(item => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${item.name}</td><td>RM${item.price}</td>`;
+          tbody.appendChild(row);
+          total += parseFloat(item.price);
+        });
+      } else {
+        const row = document.createElement("tr");
+        row.innerHTML = '<td colspan="2">No items in cart.</td>';
+        tbody.appendChild(row);
+      }
+      totalEl.textContent = "RM" + total.toFixed(2);
+    });
+
+    function proceedToPayment() {
+      alert("Redirecting to payment gateway... (mock action)");
+      // You can link to a real payment service or next page here
+    }
+  </script>
+
+</body>
+</html>
