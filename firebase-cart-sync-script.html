@@ -1,0 +1,91 @@
+
+<!-- Firebase scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBa1fzqUYWAshoF1zK2x2m1XuR2eMEw8s",
+    authDomain: "uproject-2e3c7.firebaseapp.com",
+    projectId: "uproject-2e3c7",
+    storageBucket: "uproject-2e3c7.appspot.com",
+    messagingSenderId: "161272239397",
+    appId: "1:161272239397:web-3bb6f53fd53e61934c4504",
+    measurementId: "G-96RNXJ8J7X"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const addToCartBtn = document.getElementById('addToCartBtn');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const quantityInput = document.getElementById('quantity');
+  const sizeError = document.getElementById('sizeError');
+  const notification = document.getElementById('notification');
+
+  let selectedSize = 'M';
+  document.querySelectorAll('.size-option:not(.unavailable)').forEach(option => {
+    option.addEventListener('click', () => {
+      document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+      option.classList.add('selected');
+      selectedSize = option.dataset.size;
+      sizeError.style.display = 'none';
+    });
+  });
+
+  function getCartItem() {
+    const quantity = parseInt(quantityInput.value) || 1;
+    const total = (product.price * quantity).toFixed(2);
+
+    return {
+      name: product.name,
+      brand: product.brand,
+      size: selectedSize,
+      quantity,
+      price: product.price,
+      total,
+      image: product.images[0].thumb
+    };
+  }
+
+  addToCartBtn.addEventListener('click', () => {
+    if (!selectedSize) {
+      sizeError.style.display = 'block';
+      return;
+    }
+
+    const item = getCartItem();
+    const newRef = db.ref("cart").push();
+    newRef.set(item).then(() => {
+      notification.textContent = `${item.quantity} × ${item.name} (Size: ${item.size}) added to cart - RM ${item.total}`;
+      notification.className = "notification success";
+      notification.style.display = 'block';
+      setTimeout(() => notification.style.display = 'none', 3000);
+    });
+  });
+
+  checkoutBtn.addEventListener('click', () => {
+    if (!selectedSize) {
+      sizeError.style.display = 'block';
+      return;
+    }
+
+    const item = getCartItem();
+    const summary = \`
+ORDER SUMMARY:
+
+\${item.name}
+Size: \${item.size}
+Quantity: \${item.quantity}
+Price per item: RM \${item.price}
+Total: RM \${item.total}
+
+Proceed to payment?\`;
+
+    if (confirm(summary)) {
+      db.ref("cart").push(item).then(() => {
+        alert('Redirecting to checkout...');
+        window.location.href = 'cart-summary.html';
+      });
+    }
+  });
+</script>
