@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Click Counter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+    button { font-size: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Click the Button!</h1>
+  <p>You have clicked <span id="counter">0</span> times.</p>
+  <button onclick="increment()">Click Me</button>
+
+  <script>
+    let count = localStorage.getItem('clickCount') || 0;
+    document.getElementById('counter').innerText = count;
+
+    function increment() {
+      count++;
+      localStorage.setItem('clickCount', count);
+      document.getElementById('counter').innerText = count;
+    }
+  </script>
+</body>
+</html>
