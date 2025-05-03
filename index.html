@@ -1,28 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Click Counter</title>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-    button { font-size: 20px; padding: 10px 20px; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clothing Shop</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Click the Button!</h1>
-  <p>You have clicked <span id="counter">0</span> times.</p>
-  <button onclick="increment()">Click Me</button>
+  <header>
+    <h1>SHOP THE DROP</h1>
+  </header>
 
-  <script>
-    let count = localStorage.getItem('clickCount') || 0;
-    document.getElementById('counter').innerText = count;
-
-    function increment() {
-      count++;
-      localStorage.setItem('clickCount', count);
-      document.getElementById('counter').innerText = count;
-    }
-  </script>
+  <main class="product-grid">
+    <div class="product">
+      <img src="images/jacket1.png" alt="MC Night Jacket" />
+      <h2>NØNSENSE X CYBERPUNK: EDGERUNNERS - MC NIGHT JACKET</h2>
+    </div>
+    <div class="product">
+      <img src="images/jacket2.png" alt="Corporate Jacket" />
+      <h2>NØNSENSE X CYBERPUNK: EDGERUNNERS - CORPORATE JACKET</h2>
+    </div>
+    <div class="product">
+      <img src="images/hoodie1.png" alt="Sandevistan Hoodie" />
+      <h2>NØNSENSE X CYBERPUNK: EDGERUNNERS - SANDEVISTAN HOODIE</h2>
+    </div>
+    <div class="product">
+      <img src="images/sweater1.png" alt="Smasher Crewneck" />
+      <h2>NØNSENSE X CYBERPUNK: EDGERUNNERS - SMASHER CREWNECK</h2>
+    </div>
+  </main>
 </body>
 </html>
+
