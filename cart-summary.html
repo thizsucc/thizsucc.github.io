@@ -139,7 +139,7 @@
   <div class="total-price" id="grandTotal">Total: RM0.00</div>
 
   <div class="cart-buttons">
-    <button class="back-btn" onclick="window.location.href='https://sites.google.com/view/h4rshstreetwear/home'" target="_blank">← Go Back</button>
+    <button class="back-btn" onclick="window.open('https://sites.google.com/view/h4rshstreetwear/home', '_blank')">← Go Back</button>
     <button class="checkout-btn" onclick="checkout()">Proceed to Payment →</button>
   </div>
 
@@ -220,7 +220,7 @@
         // Clear the cart and redirect to a "Thank You" page
         cartItems.length = 0;  // Clear the cart
         refreshCart();
-        window.location.href = "https://sites.google.com/view/h4rshstreetwear/payment" target="_blank"; // Correct redirect link
+        window.open("https://sites.google.com/view/h4rshstreetwear/payment", "_blank"); // Correct redirect link
       } else {
         alert("Payment cancelled. You can continue shopping.");
       }
