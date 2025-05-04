@@ -176,23 +176,7 @@
     </div>
   </div>
 
-  <!-- Firebase Integration -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBa1fzqUYWAshoF1zK2x2m1XuR2eMEw8s",
-      authDomain: "uproject-2e3c7.firebaseapp.com",
-      projectId: "uproject-2e3c7",
-      storageBucket: "uproject-2e3c7.appspot.com",
-      messagingSenderId: "161272239397",
-      appId: "1:161272239397:web-3bb6f53fd53e61934c4504",
-      measurementId: "G-96RNXJ8J7X"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
     const product = {
       name: "HARSH LOVE BOXY TEE",
       brand: "HARSH STREETWEAR",
@@ -219,35 +203,19 @@
       totalPrice.textContent = "TOTAL: RM " + (product.price * qty).toFixed(2);
     });
 
-    function addToCart(redirect = false) {
+    function addToCart() {
       const quantity = parseInt(quantityInput.value) || 1;
       const total = (product.price * quantity).toFixed(2);
 
-      const item = {
-        name: product.name,
-        brand: product.brand,
-        size: selectedSize,
-        quantity: quantity,
-        price: product.price,
-        total: total,
-        image: product.images[0]
-      };
-
-      db.ref("cart").push(item).then(() => {
-        if (redirect) {
-          window.location.href = "cart-summary.html";
-        } else {
-          notification.textContent = `${quantity} × ${item.name} (Size: ${item.size}) added to cart - RM ${item.total}`;
-          notification.style.display = "block";
-          setTimeout(() => {
-            notification.style.display = "none";
-          }, 3000);
-        }
-      });
+      // Just simulate the action without actual Firebase or database connection
+      notification.textContent = `${quantity} × ${product.name} (Size: ${selectedSize}) added to cart - RM ${total}`;
+      notification.style.display = "block";
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, 3000);
     }
 
-    document.getElementById("addToCartBtn").addEventListener("click", () => addToCart(false));
-    document.getElementById("checkoutBtn").addEventListener("click", () => addToCart(true));
+    document.getElementById("addToCartBtn").addEventListener("click", addToCart);
   </script>
 </body>
 </html>
