@@ -108,6 +108,15 @@
       background: #000;
       color: #fff;
     }
+
+    .notification {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 4px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -122,7 +131,9 @@
         <th>Total</th>
       </tr>
     </thead>
-    <tbody id="cartBody"></tbody>
+    <tbody id="cartBody">
+      <!-- Cart items will be added here dynamically -->
+    </tbody>
   </table>
 
   <div class="total-price" id="grandTotal">Total: RM0.00</div>
@@ -132,65 +143,67 @@
     <button class="checkout-btn" onclick="checkout()">Proceed to Payment →</button>
   </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBa1fzqUYWAshoF1zK2x2m1XuR2eMEw8s",
-      authDomain: "uproject-2e3c7.firebaseapp.com",
-      projectId: "uproject-2e3c7",
-      storageBucket: "uproject-2e3c7.appspot.com",
-      messagingSenderId: "161272239397",
-      appId: "1:161272239397:web-3bb6f53fd53e61934c4504",
-      measurementId: "G-96RNXJ8J7X"
-    };
+  <!-- Notification -->
+  <div id="notification" class="notification"></div>
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+  <script>
+    // Simulated Cart Data
+    const cartItems = [
+      { name: "HARSH LOVE TEE", price: 75.00, size: "M", quantity: 2, image: "img/boxyshirt.png" },
+      { name: "ASTRAL PANTS", price: 125.00, size: "M", quantity: 1, image: "img/astralpants.png" },
+      { name: "HARSH NECKLACE", price: 57.00, size: "20", quantity: 3, image: "img/necklace.png" }
+    ];
+
     const cartBody = document.getElementById("cartBody");
     const grandTotal = document.getElementById("grandTotal");
+    const notification = document.getElementById("notification");
 
-    db.ref("cart").once("value").then(snapshot => {
-      const data = snapshot.val();
+    // Function to display cart items and calculate total price
+    function displayCart() {
       let total = 0;
-      if (data) {
-        Object.entries(data).forEach(([key, item]) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>
-              <div class="cart-item">
-                <img src="img/boxyshirt.png" alt="${item.name}" />
-                <div class="item-info">
-                  <h3>${item.name}</h3>
-                  <small>RM${item.price} MYR</small><br>
-                  <small>Size: Free</small>
-                </div>
+      cartItems.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>
+            <div class="cart-item">
+              <img src="${item.image}" alt="${item.name}" />
+              <div class="item-info">
+                <h3>${item.name}</h3>
+                <small>RM ${item.price} MYR</small><br>
+                <small>Size: ${item.size}</small>
               </div>
-            </td>
-            <td style="text-align:center;">
-              <input class="quantity-control" type="number" value="1" min="1" readonly />
-              <div class="remove-link" onclick="removeItem('${key}')">Remove</div>
-            </td>
-            <td style="text-align:right;">RM${item.price}</td>
-          `;
-          cartBody.appendChild(row);
-          total += parseFloat(item.price);
-        });
-      } else {
-        cartBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Your cart is empty.</td></tr>';
-      }
-      grandTotal.textContent = "Total: RM" + total.toFixed(2);
-    });
+            </div>
+          </td>
+          <td style="text-align:center;">
+            <input class="quantity-control" type="number" value="${item.quantity}" min="1" readonly />
+            <div class="remove-link" onclick="removeItem('${item.name}')">Remove</div>
+          </td>
+          <td style="text-align:right;">RM ${item.price * item.quantity}</td>
+        `;
+        cartBody.appendChild(row);
+        total += item.price * item.quantity;
+      });
+      grandTotal.textContent = "Total: RM " + total.toFixed(2);
+    }
 
-    function removeItem(key) {
-      if (confirm("Remove this item from cart?")) {
-        firebase.database().ref("cart/" + key).remove().then(() => location.reload());
+    // Function to remove an item from the cart (simulated)
+    function removeItem(itemName) {
+      const index = cartItems.findIndex(item => item.name === itemName);
+      if (index > -1) {
+        cartItems.splice(index, 1);  // Remove item from the array
+        refreshCart();  // Re-render the cart
       }
     }
 
+    // Function to refresh the cart after removing an item
+    function refreshCart() {
+      cartBody.innerHTML = '';
+      displayCart();
+    }
+
+    // Checkout function
     function checkout() {
-      const totalAmount = document.getElementById("grandTotal").textContent.replace("Total: RM", "").trim();
+      const totalAmount = grandTotal.textContent.replace("Total: RM", "").trim();
       const confirmationMessage = `
         You're about to purchase the following:
 
@@ -204,17 +217,17 @@
       if (confirmed) {
         // Simulate a successful transaction
         alert("Payment successful! Thank you for your purchase.");
-        
         // Clear the cart and redirect to a "Thank You" page
-        db.ref("cart").remove().then(() => {
-          alert("Your cart has been cleared.");
-          window.location.href = "thankyou.html"; // Example redirect to a thank you page
-        });
+        cartItems.length = 0;  // Clear the cart
+        refreshCart();
+        window.location.href = "thankyou.html"; // Example redirect to a thank you page
       } else {
-        // If the user cancels the checkout
         alert("Payment cancelled. You can continue shopping.");
       }
     }
+
+    // Initialize the cart
+    displayCart();
   </script>
 
 </body>
