@@ -7,11 +7,9 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      color: #333;
-      background-color: #f9f9f9;
+      margin: 0;
+      padding: 40px;
+      background-color: #f4f4f4;
     }
 
     h1 {
@@ -24,6 +22,8 @@
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .input-group {
@@ -39,9 +39,23 @@
       width: 100%;
       padding: 12px;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 16px;
       margin-top: 5px;
+    }
+
+    .input-group input[type="text"], .input-group input[type="number"], .input-group input[type="month"] {
+      padding-left: 10px;
+    }
+
+    .voucher-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 5px;
+      margin-bottom: 20px;
     }
 
     .payment-buttons {
@@ -76,12 +90,25 @@
       background-color: #bbb;
     }
 
+    .total-price {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 20px;
+      text-align: right;
+    }
+
     .payment-message {
       margin-top: 20px;
       padding: 15px;
       background-color: #4CAF50;
       color: white;
       border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+
+    .error-message {
+      color: red;
       text-align: center;
       display: none;
     }
@@ -113,30 +140,68 @@
         <input type="text" id="cvv" name="cvv" required placeholder="123">
       </div>
 
+      <!-- Voucher Input Section -->
+      <div class="input-group">
+        <label for="voucherCode">Voucher Code (SYBAU for 25% off)</label>
+        <input type="text" id="voucherCode" class="voucher-input" placeholder="Enter voucher code">
+        <div id="voucherError" class="error-message">Invalid voucher code. Please try again.</div>
+      </div>
+
+      <!-- Payment Buttons -->
       <div class="payment-buttons">
         <button type="button" class="cancel-btn" onclick="window.location.href='cart-summary.html'">Cancel</button>
         <button type="submit" class="pay-btn">Pay Now</button>
       </div>
     </form>
-  </div>
 
-  <div id="paymentMessage" class="payment-message">
-    <h3>Payment Successful!</h3>
-    <p>Thank you for your purchase. Your order will be processed shortly.</p>
-    <button onclick="window.location.href='index.html'">Go to Homepage</button>
+    <div id="paymentMessage" class="payment-message">
+      <h3>Payment Successful!</h3>
+      <p>Thank you for your purchase. Your order will be processed shortly.</p>
+      <button onclick="window.location.href='index.html'">Go to Homepage</button>
+    </div>
+
+    <div id="totalPrice" class="total-price">Total: RM 75.00</div>
   </div>
 
   <script>
     const paymentForm = document.getElementById('paymentForm');
+    const totalPriceElement = document.getElementById('totalPrice');
     const paymentMessage = document.getElementById('paymentMessage');
+    const voucherInput = document.getElementById('voucherCode');
+    const voucherError = document.getElementById('voucherError');
 
+    const originalTotal = 75.00;
+    let currentTotal = originalTotal;
+
+    // Function to calculate total after applying voucher code
+    function applyVoucher() {
+      const voucherCode = voucherInput.value.trim().toUpperCase();
+      if (voucherCode === 'SYBAU') {
+        // Apply a 25% discount
+        currentTotal = originalTotal * 0.75;
+        totalPriceElement.textContent = `Total: RM ${currentTotal.toFixed(2)}`;
+        voucherError.style.display = 'none';  // Hide the error message
+      } else {
+        voucherError.style.display = 'block';  // Show error message
+      }
+    }
+
+    // Handle form submission (Payment simulation)
     paymentForm.addEventListener('submit', function(e) {
-      e.preventDefault();  // Prevent the default form submission
-      
-      // Simulate payment success
-      paymentMessage.style.display = 'block';
-      paymentForm.style.display = 'none';  // Hide the payment form
+      e.preventDefault();  // Prevent the form from submitting
+
+      const voucherCode = voucherInput.value.trim().toUpperCase();
+      if (voucherCode === 'SYBAU') {
+        // Simulate successful payment
+        paymentMessage.style.display = 'block';
+        paymentForm.style.display = 'none';  // Hide the payment form
+      } else {
+        voucherError.style.display = 'block';  // Show the error message for invalid voucher
+      }
     });
+
+    // Apply voucher code on input change
+    voucherInput.addEventListener('input', applyVoucher);
   </script>
 
 </body>
