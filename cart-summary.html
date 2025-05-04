@@ -108,15 +108,6 @@
       background: #000;
       color: #fff;
     }
-
-    .notification {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #4CAF50;
-      color: white;
-      border-radius: 4px;
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -140,11 +131,8 @@
 
   <div class="cart-buttons">
     <button class="back-btn" onclick="window.open('https://sites.google.com/view/h4rshstreetwear/home', '_blank')">← Go Back</button>
-    <button class="checkout-btn" onclick="checkout()">Proceed to Payment →</button>
+    <button class="checkout-btn" onclick="window.open('https://sites.google.com/view/h4rshstreetwear/payment', '_blank')">Proceed to Payment →</button>
   </div>
-
-  <!-- Notification -->
-  <div id="notification" class="notification"></div>
 
   <script>
     // Simulated Cart Data
@@ -156,7 +144,6 @@
 
     const cartBody = document.getElementById("cartBody");
     const grandTotal = document.getElementById("grandTotal");
-    const notification = document.getElementById("notification");
 
     // Function to display cart items and calculate total price
     function displayCart() {
@@ -176,7 +163,6 @@
           </td>
           <td style="text-align:center;">
             <input class="quantity-control" type="number" value="${item.quantity}" min="1" readonly />
-            <div class="remove-link" onclick="removeItem('${item.name}')">Remove</div>
           </td>
           <td style="text-align:right;">RM ${item.price * item.quantity}</td>
         `;
@@ -184,46 +170,6 @@
         total += item.price * item.quantity;
       });
       grandTotal.textContent = "Total: RM " + total.toFixed(2);
-    }
-
-    // Function to remove an item from the cart (simulated)
-    function removeItem(itemName) {
-      const index = cartItems.findIndex(item => item.name === itemName);
-      if (index > -1) {
-        cartItems.splice(index, 1);  // Remove item from the array
-        refreshCart();  // Re-render the cart
-      }
-    }
-
-    // Function to refresh the cart after removing an item
-    function refreshCart() {
-      cartBody.innerHTML = '';
-      displayCart();
-    }
-
-    // Checkout function
-    function checkout() {
-      const totalAmount = grandTotal.textContent.replace("Total: RM", "").trim();
-      const confirmationMessage = `
-        You're about to purchase the following:
-
-        Total Amount: RM ${totalAmount}
-
-        Please confirm to proceed to payment.
-      `;
-
-      const confirmed = confirm(confirmationMessage);
-
-      if (confirmed) {
-        // Simulate a successful transaction
-        alert("Payment successful! Thank you for your purchase.");
-        // Clear the cart and redirect to a "Thank You" page
-        cartItems.length = 0;  // Clear the cart
-        refreshCart();
-        window.open("https://sites.google.com/view/h4rshstreetwear/payment", "_blank"); // Correct redirect link
-      } else {
-        alert("Payment cancelled. You can continue shopping.");
-      }
     }
 
     // Initialize the cart
