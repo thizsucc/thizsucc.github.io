@@ -139,8 +139,8 @@
   <div class="total-price" id="grandTotal">Total: RM0.00</div>
 
   <div class="cart-buttons">
-    <button class="back-btn" onclick="https://sites.google.com/view/h4rshstreetwear/home", target="_blank" >← Go Back</button>
-    <button class="checkout-btn" onclick="https://sites.google.com/view/h4rshstreetwear/payment", target="_blank" >Proceed to Payment →</button>
+    <button class="back-btn" onclick="window.open('https://sites.google.com/view/h4rshstreetwear/home', '_blank')">← Go Back</button>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Payment →</button>
   </div>
 
   <!-- Notification -->
@@ -163,7 +163,7 @@
       let total = 0;
       cartItems.forEach(item => {
         const row = document.createElement("tr");
-        row.innerHTML = 
+        row.innerHTML = `
           <td>
             <div class="cart-item">
               <img src="${item.image}" alt="${item.name}" />
@@ -179,7 +179,7 @@
             <div class="remove-link" onclick="removeItem('${item.name}')">Remove</div>
           </td>
           <td style="text-align:right;">RM ${item.price * item.quantity}</td>
-        ;
+        `;
         cartBody.appendChild(row);
         total += item.price * item.quantity;
       });
@@ -204,13 +204,13 @@
     // Checkout function
     function checkout() {
       const totalAmount = grandTotal.textContent.replace("Total: RM", "").trim();
-      const confirmationMessage = 
+      const confirmationMessage = `
         You're about to purchase the following:
 
         Total Amount: RM ${totalAmount}
 
         Please confirm to proceed to payment.
-      ;
+      `;
 
       const confirmed = confirm(confirmationMessage);
 
@@ -220,7 +220,7 @@
         // Clear the cart and redirect to a "Thank You" page
         cartItems.length = 0;  // Clear the cart
         refreshCart();
-        window.location.href = "thankyou.html", "_blank"; // Example redirect to a thank you page
+        window.open("https://sites.google.com/view/h4rshstreetwear/payment", "_blank"); // Correct redirect link
       } else {
         alert("Payment cancelled. You can continue shopping.");
       }
