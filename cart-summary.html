@@ -120,6 +120,7 @@
         <th>Product</th>
         <th>Quantity</th>
         <th>Total</th>
+        <th>Remove</th>
       </tr>
     </thead>
     <tbody id="cartBody">
@@ -147,8 +148,9 @@
 
     // Function to display cart items and calculate total price
     function displayCart() {
+      cartBody.innerHTML = ''; // Clear previous cart items
       let total = 0;
-      cartItems.forEach(item => {
+      cartItems.forEach((item, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>
@@ -165,11 +167,18 @@
             <input class="quantity-control" type="number" value="${item.quantity}" min="1" readonly />
           </td>
           <td style="text-align:right;">RM ${item.price * item.quantity}</td>
+          <td style="text-align:center;"><span class="remove-link" onclick="removeItem(${index})">Remove</span></td>
         `;
         cartBody.appendChild(row);
         total += item.price * item.quantity;
       });
       grandTotal.textContent = "Total: RM " + total.toFixed(2);
+    }
+
+    // Function to remove item from cart
+    function removeItem(index) {
+      cartItems.splice(index, 1); // Remove the item from the cart array
+      displayCart(); // Re-render the cart with the updated items
     }
 
     // Initialize the cart
